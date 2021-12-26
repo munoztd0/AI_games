@@ -21,7 +21,7 @@ if not is_available():
     raise ValueError("no CUDA!")
 
 #load best model
-model = PPO.load('./train/best_model_200000')
+model = PPO.load('./train/best_model_1000000')
 
 #1. setup game base environnement
 env = gym_super_mario_bros.make('SuperMarioBros-v0')
