@@ -1,0 +1,50 @@
+#!/usr/local/bin/python
+
+#game from openAI gym
+import gym_super_mario_bros
+#joypad wrapper
+from nes_py.wrappers import JoypadSpace
+#simplified controls
+from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
+
+#import the PPO (Proximal policy oprimizer) algorythm form OpenAI
+from stable_baselines3 import PPO
+
+# import frame stacker wrapper and grayscaling
+from gym.wrappers import GrayScaleObservation
+#import vectorization wrappers
+from stable_baselines3.common.vec_env import VecFrameStack, DummyVecEnv
+
+#check CUDA availiability
+from torch.cuda import is_available
+if not is_available():
+    raise ValueError("no CUDA!")
+
+#load best model
+model = PPO.load('./train/best_model_200000')
+
+#1. setup game base environnement
+env = gym_super_mario_bros.make('SuperMarioBros-v0')
+
+
+#2. reduce action space to something managable
+env = JoypadSpace(env, SIMPLE_MOVEMENT)
+
+#3. Grayscale
+env = GrayScaleObservation(env, keep_dim=True)
+
+#4. wrap inside the dummy env
+env = DummyVecEnv([lambda: env])
+
+#5. stack up the frame
+env = VecFrameStack(env, 4, channels_order="last")
+
+#start the game
+state = env.reset()
+
+#loop trhough the game
+while True:
+    #get berst action for each state
+    action, state = model.predict(state)
+    state, reward, done, info = env.step(action)
+    env.render()
