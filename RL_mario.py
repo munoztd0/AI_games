@@ -1,16 +1,9 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-# 
+
+
 # ## 1. Setup Mario
-
-# In[25]:
-
-
 train = False
-
-
-# In[26]:
 
 
 #game from openAI gym
@@ -19,9 +12,6 @@ import gym_super_mario_bros
 from nes_py.wrappers import JoypadSpace
 #simplified controls
 from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
-
-
-# In[27]:
 
 
 #Create a flag - restart (true) or not?
@@ -39,8 +29,6 @@ from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
 # env.close()
 
 
-# In[28]:
-
 
 # state = env.reset()
 #frame after the step
@@ -55,9 +43,6 @@ from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
 
 # ## 2. Preprocess Environment
 # #### Rubbish data = Rubbish AI !
-
-# In[29]:
-
 
 # import frame stackewr wrapper and grayscaling
 from gym.wrappers import GrayScaleObservation
@@ -75,8 +60,6 @@ if not is_available():
 #to visualize
 from matplotlib import pyplot as plt
 
-
-# In[30]:
 
 
 #1. setup game base environnement
@@ -99,20 +82,13 @@ env = DummyVecEnv([lambda: env])
 env = VecFrameStack(env, 4, channels_order="last")
 
 
-# In[31]:
-
 
 state = env.reset()
-
-
-# In[32]:
 
 
 state.shape
 state, reward, done, info = env.step([env.action_space.sample()])
 
-
-# In[33]:
 
 
 #pot it out
@@ -126,7 +102,6 @@ plt.show()
 # ## 3. Train the RL model
 # #### Here using the PPO (Proximal policy oprimizer) algorythm form OpenAI
 
-# In[34]:
 
 
 import os
@@ -136,7 +111,6 @@ from stable_baselines3.common.callbacks import BaseCallback
 #conda install tensorboard
 
 
-# In[35]:
 
 
 # nice wrapper to save callbacks easilly
@@ -159,7 +133,6 @@ class TrainAndLoggingCallback(BaseCallback):
         return True
 
 
-# In[36]:
 
 
 #setup directories to save stuff
@@ -177,15 +150,12 @@ except:
 callback = TrainAndLoggingCallback(check_freq=10000, save_path=CHECKPOINT_DIR)
 
 
-# In[37]:
-
 
 #specify training with convolutional neural network (CNN)
 model = PPO("CnnPolicy", env, verbose=1, 
     tensorboard_log=LOGS_DIR, learning_rate=0.000001, n_steps=512)
 
 
-# In[39]:
 
 
 if train:
@@ -198,14 +168,11 @@ if train:
 
 # ## 4. Test out the model
 
-# In[19]:
-
 
 #load best model
 model = PPO.load('./train/best_model_90000')
 
 
-# In[ ]:
 
 
 #start the game
@@ -219,10 +186,7 @@ while True:
     env.render()
 
 
-# In[21]:
-
 
 env.close()
 
 
-# 
