@@ -3,7 +3,7 @@ A multiplayer AI programming game in which you train leeks to fight each other
 
 ![leek wars](https://raw.githubusercontent.com/munoztd0/MarioRL/master/img/leek.gif)
 
-The language of Leek Wars is LeekScript, built in Java.
+The language of Leek Wars is LeekScript, built in Java. Follow my leek @leakit22!
 
 # Game Of Life
 Conway's Game Of Life (Python Implementation)
@@ -30,3 +30,5 @@ To run just :
 And then:
   
 ```python3 MarioRL/main.py```
+
+![demo Mario RL](https://raw.githubusercontent.com/munoztd0/MarioRL/master/img/tensor.gif)
